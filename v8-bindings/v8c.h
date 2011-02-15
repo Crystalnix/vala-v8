@@ -119,14 +119,12 @@ void v8_try_catch_reset(V8TryCatch* try_catch);
 void v8_try_catch_set_verbose(V8TryCatch* try_catch, bool value);
 
 /* Context */
-V8Handle v8_context_new(bool persistent);
-void v8_context_free(V8Handle context, bool persistent);
-/*
 V8Handle v8_context_new(V8ExtensionConfiguration extensions,
                         V8Handle global_template);
+void v8_context_free(V8Handle context);
 void v8_context_enter(V8Handle context);
 void v8_context_exit(V8Handle context);
-*/
+
 #ifdef __cplusplus
 }
 #endif
