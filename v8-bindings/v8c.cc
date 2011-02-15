@@ -1,6 +1,8 @@
 #define BUILDING_V8C
 #include <v8.h>
+
 #include "v8c.h"
+#include "v8c-private.h"
 
 template<typename T>
 static V8Handle unwrap_handle(v8::Handle<T> handle) {
@@ -23,11 +25,11 @@ bool v8_handle_is_empty(V8Handle handle) {
   return wrap_handle<void>(handle).IsEmpty();
 }
 
-v8::HandleScope* v8_handle_scope_new() {
-  return new v8::HandleScope();
+V8CHandleScope* v8_handle_scope_new() {
+  return new V8CHandleScope();
 }
 
-void v8_handle_scope_free(V8HandleScope* hs) {
+void v8_handle_scope_free(V8CHandleScope* hs) {
   delete hs;
 }
 
@@ -76,7 +78,7 @@ V8Handle v8_arguments_get(const V8Arguments* args, int i) {
   return unwrap_handle((*args)[i]);
 }
 
-struct V8InvocationCallbackData {
+struct _V8InvocationCallbackData {
   V8InvocationCallback callback;
   // TODO: void* data.
 };

@@ -47,8 +47,9 @@ typedef void* V8Handle;
    function prototypes work on both sides.
  */
 #ifdef __cplusplus
+class V8CHandleScope;
 extern "C" {
-typedef v8::HandleScope V8HandleScope;
+typedef V8CHandleScope V8HandleScope;
 typedef v8::Arguments V8Arguments;
 typedef v8::ExtensionConfiguration* V8ExtensionConfiguration;
 typedef v8::String::Utf8Value V8StringUtf8Value;
