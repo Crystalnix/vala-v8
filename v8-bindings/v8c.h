@@ -95,7 +95,17 @@ V8Handle v8_arguments_get(const V8Arguments* args, int i);
    it internally.  We could still provide extra-data-like
    functionality if needed, though. */
 typedef V8Handle (*V8InvocationCallback)(const V8Arguments*);
+typedef V8Handle (*V8InvocationCallbackWithData)(const V8Arguments*, void*);
+typedef struct _V8InvocationCallbackData {
+  V8InvocationCallbackWithData callback;
+  void *data;
+} V8InvocationCallbackData;
+
 V8Handle v8_function_template_new(V8InvocationCallback callback);
+
+/* Creates JavaScript callback with custom data passed to the C callback function */
+/* callbackData pointer must be valid until function template handle is disposed */
+V8Handle v8_function_template_new_with_data(V8InvocationCallbackData *callbackData);
 
 /* ObjectTemplate */
 V8Handle v8_object_template_new();

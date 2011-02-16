@@ -78,25 +78,29 @@ V8Handle v8_arguments_get(const V8Arguments* args, int i) {
   return unwrap_handle((*args)[i]);
 }
 
-struct _V8InvocationCallbackData {
-  V8InvocationCallback callback;
-  // TODO: void* data.
-};
+static v8::Handle<v8::Value> v8_invocation_callback_no_data(const v8::Arguments& args) {
+  v8::Local<v8::External> data = v8::Local<v8::External>::Cast(args.Data());
+  V8InvocationCallback callback =
+      reinterpret_cast<V8InvocationCallback>(data->Value());
+  return wrap_handle<v8::Value>(callback(&args));
+}
 
-static v8::Handle<v8::Value> v8_invocation_callback(const v8::Arguments& args) {
+static v8::Handle<v8::Value> v8_invocation_callback_with_data(const v8::Arguments& args) {
   v8::Local<v8::External> data = v8::Local<v8::External>::Cast(args.Data());
   V8InvocationCallbackData* callback_data =
       static_cast<V8InvocationCallbackData*>(data->Value());
-  return wrap_handle<v8::Value>(callback_data->callback(&args));
+  return wrap_handle<v8::Value>(callback_data->callback(&args, callback_data->data));
 }
 
 V8Handle v8_function_template_new(V8InvocationCallback callback) {
-  // XXX this leaks.  We need to somehow tie this lifetime to the
-  // function template's lifetime?
-  V8InvocationCallbackData* callback_data = new V8InvocationCallbackData;
-  callback_data->callback = callback;
   return unwrap_handle(
-      v8::FunctionTemplate::New(v8_invocation_callback,
+      v8::FunctionTemplate::New(v8_invocation_callback_no_data,
+				v8::External::New((void*)callback)));
+}
+
+V8Handle v8_function_template_new_with_data(V8InvocationCallbackData *callback_data) {
+  return unwrap_handle(
+      v8::FunctionTemplate::New(v8_invocation_callback_with_data,
 				v8::External::New(callback_data)));
 }
 
