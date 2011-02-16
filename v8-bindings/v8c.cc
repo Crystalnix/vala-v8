@@ -104,6 +104,49 @@ V8Handle v8_function_template_new_with_data(V8InvocationCallbackData *callback_d
 				v8::External::New(callback_data)));
 }
 
+V8Handle v8_function_template_get_function(V8Handle self)
+{
+  return unwrap_handle(wrap_handle<v8::FunctionTemplate>(self)->GetFunction());
+}
+
+void v8_function_template_set_call_handler(V8Handle self, V8InvocationCallback callback)
+{
+  wrap_handle<v8::FunctionTemplate>(self)->SetCallHandler(
+    v8_invocation_callback_no_data,
+    v8::External::New((void*)callback)
+  );
+}
+
+V8Handle v8_function_template_instance_template(V8Handle self)
+{
+  return unwrap_handle(wrap_handle<v8::FunctionTemplate>(self)->InstanceTemplate());
+}
+
+void v8_function_template_inherit(V8Handle self, V8Handle parent)
+{
+  wrap_handle<v8::FunctionTemplate>(self)->Inherit(wrap_handle<v8::FunctionTemplate>(parent));
+}
+
+V8Handle v8_function_template_prototype_template(V8Handle self)
+{
+  return unwrap_handle(wrap_handle<v8::FunctionTemplate>(self)->PrototypeTemplate());
+}
+
+void v8_function_template_set_class_name(V8Handle self, V8Handle name)
+{
+  wrap_handle<v8::FunctionTemplate>(self)->SetClassName(wrap_handle<v8::String>(name));
+}
+
+void v8_function_template_set_hidden_prototype(bool value)
+{
+  wrap_handle<v8::FunctionTemplate>(self)->SetHiddenPrototype(value);
+}
+
+bool v8_function_template_has_instance(V8Handle self, V8Handle object)
+{
+  return wrap_handle<v8::FunctionTemplate>(self)->HasInstance(wrap_handle<v8::Value>(object));
+}
+
 V8Handle v8_object_template_new() {
   return unwrap_handle(v8::ObjectTemplate::New());
 }

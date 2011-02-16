@@ -102,10 +102,18 @@ typedef struct _V8InvocationCallbackData {
 } V8InvocationCallbackData;
 
 V8Handle v8_function_template_new(V8InvocationCallback callback);
-
+/* v8_function_template_new_with_data(): */
 /* Creates JavaScript callback with custom data passed to the C callback function */
 /* callbackData pointer must be valid until function template handle is disposed */
 V8Handle v8_function_template_new_with_data(V8InvocationCallbackData *callbackData);
+V8Handle v8_function_template_get_function(V8Handle self);
+void v8_function_template_set_call_handler(V8Handle self, V8InvocationCallback callback);
+V8Handle v8_function_template_instance_template(V8Handle self);
+void v8_function_template_inherit(V8Handle self, V8Handle parent);
+V8Handle v8_function_template_prototype_template(V8Handle self);
+void v8_function_template_set_class_name(V8Handle self, V8Handle name);
+void v8_function_template_set_hidden_prototype(bool value);
+bool v8_function_template_has_instance(V8Handle self, V8Handle object);
 
 /* ObjectTemplate */
 V8Handle v8_object_template_new();
