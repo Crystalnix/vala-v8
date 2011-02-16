@@ -36,6 +36,8 @@
    all the documentation.
 */
 
+#include <stdint.h>
+
 /* v8::Handle has a lot of nice type-checking and wrapping and unwrapping,
    but in the C world all we get is a pointer.
    Internally, V8Handle is the pointer held by a v8::Handle.
@@ -51,6 +53,7 @@ class V8CHandleScope;
 extern "C" {
 typedef V8CHandleScope V8HandleScope;
 typedef v8::Arguments V8Arguments;
+typedef v8::AccessorInfo V8AccessorInfo;
 typedef v8::ExtensionConfiguration* V8ExtensionConfiguration;
 typedef v8::String::Utf8Value V8StringUtf8Value;
 typedef v8::TryCatch V8TryCatch;
@@ -58,6 +61,7 @@ typedef v8::TryCatch V8TryCatch;
 typedef int bool;
 typedef struct _V8HandleScope V8HandleScope;
 typedef struct _V8Arguments V8Arguments;
+typedef struct _V8AccessorInfo V8AccessorInfo;
 typedef void* V8ExtensionConfiguration;
 typedef void V8StringUtf8Value;
 typedef struct _V8TryCatch V8TryCatch;
@@ -95,9 +99,8 @@ V8Handle v8_arguments_get(const V8Arguments* args, int i);
    it internally.  We could still provide extra-data-like
    functionality if needed, though. */
 typedef V8Handle (*V8InvocationCallback)(const V8Arguments*);
-typedef V8Handle (*V8InvocationCallbackWithData)(const V8Arguments*, void*);
 typedef struct _V8InvocationCallbackData {
-  V8InvocationCallbackWithData callback;
+  V8InvocationCallback callback;
   void *data;
 } V8InvocationCallbackData;
 
@@ -116,7 +119,40 @@ void v8_function_template_set_hidden_prototype(bool value);
 bool v8_function_template_has_instance(V8Handle self, V8Handle object);
 
 /* ObjectTemplate */
+typedef V8Handle    (*V8AccessorGetter)(V8Handle, const V8AccessorInfo*);
+typedef void        (*V8AccessorSetter)(V8Handle, V8Handle, const V8AccessorInfo*);
+typedef V8AccessorGetter V8NamedPropertyGetter; 
+typedef V8AccessorSetter V8NamedPropertySetter;
+typedef V8Handle    (*V8IndexedPropertyGetter)(uint32_t, const V8AccessorInfo*);
+typedef V8Handle    (*V8IndexedPropertySetter)(uint32_t, V8Handle, const V8AccessorInfo*);
+
+typedef struct _V8AccessorData {
+    V8AccessorGetter getter;
+    V8AccessorSetter setter;
+} V8AccessorData;
+
+typedef struct _V8NamedPropertyData {
+    V8NamedPropertyGetter getter;
+    V8NamedPropertySetter setter;
+} V8NamedPropertyData;
+
+typedef struct _V8IndexedPropertyData {
+    V8IndexedPropertyGetter getter;
+    V8IndexedPropertySetter setter;
+} V8IndexedPropertyData;
+
 V8Handle v8_object_template_new();
+V8Handle v8_object_template_new_instance(V8Handle self);
+void v8_object_template_set_accessor(V8Handle self, V8Handle name, 
+                                     V8AccessorData *accessor_data);
+void v8_object_template_set_named_property_handler(V8Handle self,
+                                                   V8NamedPropertyData *named_property_data);
+void v8_object_template_set_indexed_property_handler(V8Handle self,
+                                                     V8IndexedPropertyData *indexed_property_data);
+void v8_object_template_set_call_as_function_handler(V8Handle self, V8InvocationCallback callback);
+void v8_object_template_mark_as_undetectable(V8Handle self);
+int v8_object_template_internal_field_count(V8Handle self);
+void v8_object_template_set_internal_field_count(V8Handle self, int value);
 
 /* Special static values */
 V8Handle v8_undefined();

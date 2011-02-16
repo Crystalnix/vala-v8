@@ -89,7 +89,7 @@ static v8::Handle<v8::Value> v8_invocation_callback_with_data(const v8::Argument
   v8::Local<v8::External> data = v8::Local<v8::External>::Cast(args.Data());
   V8InvocationCallbackData* callback_data =
       static_cast<V8InvocationCallbackData*>(data->Value());
-  return wrap_handle<v8::Value>(callback_data->callback(&args, callback_data->data));
+  return wrap_handle<v8::Value>(callback_data->callback(&args));
 }
 
 V8Handle v8_function_template_new(V8InvocationCallback callback) {
@@ -149,6 +149,111 @@ bool v8_function_template_has_instance(V8Handle self, V8Handle object)
 
 V8Handle v8_object_template_new() {
   return unwrap_handle(v8::ObjectTemplate::New());
+}
+
+V8Handle v8_object_template_new_instance(V8Handle self) {
+  return unwrap_handle(wrap_handle<v8::ObjectTemplate>(self)->NewInstance());
+}
+
+/* getter / setter wrappers for object template */
+
+v8::Handle<Value> accessor_getter_callback(v8::Local<v8::String> property, const v8::AccessorInfo& info) {
+  v8::Local<v8::External> data = v8::Local<v8::External>::Cast(info.Data());
+  V8AccessorData *accessor_data =
+      reinterpret_cast<V8AccessorData*>(data->Value());
+      
+  return wrap_handle<v8::Value>(accessor_data->getter(unwrap_handle(property), &info));
+}
+
+void accessor_setter_callback(v8::Local<v8::String> property, v8::Local<v8::Value> value, 
+                             const v8::AccessorInfo& info) 
+{
+  v8::Local<v8::External> data = v8::Local<v8::External>::Cast(info.Data());
+  V8AccessorData *named_data =
+      reinterpret_cast<V8AccessorData*>(data->Value());
+  accessor_data->setter(unwrap_handle(property), unwrap_handle(value), &info);
+}
+
+v8::Handle<Value> named_getter_callback(v8::Local<v8::String> property, const v8::AccessorInfo& info) {
+  v8::Local<v8::External> data = v8::Local<v8::External>::Cast(info.Data());
+  V8NamedPropertyData *named_data =
+      reinterpret_cast<V8NamedPropertyData*>(data->Value());
+      
+  return wrap_handle<v8::Value>(named_data->getter(unwrap_handle(property), &info));
+}
+
+void named_setter_callback(v8::Local<v8::String> property, v8::Local<v8::Value> value, 
+                             const v8::AccessorInfo& info) 
+{
+  v8::Local<v8::External> data = v8::Local<v8::External>::Cast(info.Data());
+  V8NamedPropertyData *named_data =
+      reinterpret_cast<V8NamedPropertyData*>(data->Value());
+  named_data->setter(unwrap_handle(property), unwrap_handle(value), &info);
+}
+
+v8::Handle<Value> indexed_getter_callback(uint32_t index, const v8::AccessorInfo& info) {
+  v8::Local<v8::External> data = v8::Local<v8::External>::Cast(info.Data());
+  V8IndexedPropertyData *indexed_data =
+      reinterpret_cast<V8IndexedPropertyData*>(data->Value());
+      
+  return wrap_handle<v8::Value>(indexed_data->getter(index, &info));
+}
+
+void indexed_setter_callback(uint32_t index, v8::Local<v8::Value> value, 
+                             const v8::AccessorInfo& info) 
+{
+  v8::Local<v8::External> data = v8::Local<v8::External>::Cast(info.Data());
+  V8IndexedPropertyData *indexed_data =
+      reinterpret_cast<V8IndexedPropertyData*>(data->Value());
+  indexed_data->setter(index, unwrap_handle(value), &info);
+}
+
+void v8_object_template_set_accessor(V8Handle self, V8Handle name, 
+                                     V8AccessorData *accessor_data) {
+  wrap_handle<v8::ObjectTemplate>(self)->SetAccessor(
+      wrap_handle<v8::String>(name),
+      generic_getter_callback,
+      setter != NULL ? generic_setter_callback : 0,
+      v8::External::New(accessor_data)      
+  );
+}
+
+void v8_object_template_set_named_property_handler(V8Handle self,
+                                                   V8NamedPropertyData *named_property_data) {
+   wrap_handle<v8::ObjectTemplate>(self)->SetNamedPropertyHandler(
+       generic_getter_callback,
+       setter != NULL ? generic_setter_callback : 0,
+       0, 0, 0,
+       v8::External::New(named_property_data)      
+   );
+                                                     
+}
+
+void v8_object_template_set_indexed_property_handler(V8Handle self,
+                                                     V8IndexedPropertyData *indexed_property_data) {
+   wrap_handle<v8::ObjectTemplate>(self)->SetIndexedPropertyHandler(
+       indexed_getter_callback,
+       setter != NULL ? indexed_setter_callback : 0,
+       0, 0, 0,
+       v8::External::New(indexed_property_data)      
+   );
+}
+                                                     
+void v8_object_template_set_call_as_function_handler(V8Handle self, V8InvocationCallback callback) {
+  wrap_handle<v8::ObjectTemplate>(self)->SetCallAsFunctionHandler(v8_invocation_callback_no_data,
+		                                                              v8::External::New((void*)callback));
+}
+
+void v8_object_template_mark_as_undetectable(V8Handle self) {
+  wrap_handle<v8::ObjectTemplate>(self)->MarkAsUndetectable();
+}
+
+int v8_object_template_internal_field_count(V8Handle self) {
+  return wrap_handle<v8::ObjectTemplate>(self)->InternalFieldCount();
+}
+
+void v8_object_template_set_internal_field_count(V8Handle self, int value) {
+  wrap_handle<v8::ObjectTemplate>(self)->SetInternalFieldCount(value);
 }
 
 V8Handle v8_undefined() {
