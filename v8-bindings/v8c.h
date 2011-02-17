@@ -113,6 +113,30 @@ int            v8_handle_scope_number_of_handles();
 V8Handle v8_script_compile(V8Handle source);
 V8Handle v8_script_run(V8Handle script);
 
+/* Message */
+V8Handle v8_message_get(V8Handle self);
+V8Handle v8_message_get_source_line(V8Handle self);
+V8Handle v8_message_get_script_resource_name(V8Handle self);
+V8Handle v8_message_get_stack_trace(V8Handle self);
+int      v8_message_get_line_number(V8Handle self);
+int      v8_message_get_start_position(V8Handle self);
+int      v8_message_get_end_position(V8Handle self);
+int      v8_message_get_start_column(V8Handle self);
+int      v8_message_get_end_column(V8Handle self);
+
+/* StackTrace */
+V8Handle v8_stack_trace_get_frame(V8Handle self, uint32_t index);
+int      v8_stack_trace_get_frame_count(V8Handle self);
+
+/* StackFrame */
+int      v8_stack_frame_get_line_number(V8Handle self);
+int      v8_stack_frame_get_column(V8Handle self);
+V8Handle v8_stack_frame_get_script_name(V8Handle self);
+V8Handle v8_stack_frame_get_script_name_or_source_url(V8Handle self);
+V8Handle v8_stack_frame_get_function_name(V8Handle self);
+bool     v8_stack_frame_is_eval(V8Handle self);
+bool     v8_stack_frame_is_constructor(V8Handle self);
+
 /* Value */
 bool v8_value_is_undefined  (V8Handle self);
 bool v8_value_is_null       (V8Handle self);

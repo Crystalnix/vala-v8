@@ -57,6 +57,82 @@ V8Handle v8_script_run(V8Handle script) {
   return unwrap_handle(wrap_handle<v8::Script>(script)->Run());
 }
 
+/* Message */
+V8Handle v8_message_get(V8Handle self) {
+  return unwrap_handle(wrap_handle<v8::Message>(self)->Get());
+}
+
+V8Handle v8_message_get_source_line(V8Handle self) {
+  return unwrap_handle(wrap_handle<v8::Message>(self)->GetSourceLine());  
+}
+
+V8Handle v8_message_get_script_resource_name(V8Handle self) {
+  return unwrap_handle(wrap_handle<v8::Message>(self)->GetScriptResourceName());  
+}
+
+V8Handle v8_message_get_stack_trace(V8Handle self) {
+  return unwrap_handle(wrap_handle<v8::Message>(self)->GetStackTrace());  
+}
+
+int      v8_message_get_line_number(V8Handle self) {
+  return wrap_handle<v8::Message>(self)->GetLineNumber();
+}
+
+int      v8_message_get_start_position(V8Handle self) {
+  return wrap_handle<v8::Message>(self)->GetStartPosition();
+}
+
+int      v8_message_get_end_position(V8Handle self) {
+  return wrap_handle<v8::Message>(self)->GetEndPosition();
+}
+
+int      v8_message_get_start_column(V8Handle self) {
+  return wrap_handle<v8::Message>(self)->GetStartColumn();
+}
+
+int      v8_message_get_end_column(V8Handle self) {
+  return wrap_handle<v8::Message>(self)->GetEndColumn();
+}
+
+/* StackTrace */
+V8Handle v8_stack_trace_get_frame(V8Handle self, uint32_t index) {
+    return unwrap_handle(wrap_handle<v8::StackTrace>(self)->GetFrame(index));
+}
+
+int      v8_stack_trace_get_frame_count(V8Handle self) {
+  return wrap_handle<v8::StackTrace>(self)->GetFrameCount();
+}
+
+/* StackFrame */
+int      v8_stack_frame_get_line_number(V8Handle self) {
+  return wrap_handle<v8::StackFrame>(self)->GetLineNumber();
+}
+
+int      v8_stack_frame_get_column(V8Handle self) {
+  return wrap_handle<v8::StackFrame>(self)->GetColumn();
+}
+
+V8Handle v8_stack_frame_get_script_name(V8Handle self) {
+  return unwrap_handle(wrap_handle<v8::StackFrame>(self)->GetScriptName());
+}
+
+V8Handle v8_stack_frame_get_script_name_or_source_url(V8Handle self) {
+  return unwrap_handle(wrap_handle<v8::StackFrame>(self)->GetScriptNameOrSourceURL());
+}
+
+V8Handle v8_stack_frame_get_function_name(V8Handle self) {
+  return unwrap_handle(wrap_handle<v8::StackFrame>(self)->GetFunctionName());
+}
+
+bool     v8_stack_frame_is_eval(V8Handle self) {
+  return wrap_handle<v8::StackFrame>(self)->IsEval();
+}
+
+bool     v8_stack_frame_is_constructor(V8Handle self) {
+  return wrap_handle<v8::StackFrame>(self)->IsConstructor();
+}
+
+
 /* Value */
 bool v8_value_is_undefined  (V8Handle self) {
   return wrap_handle<v8::Value>(self)->IsUndefined();
