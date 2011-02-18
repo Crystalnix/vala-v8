@@ -1,0 +1,2 @@
+add_executable(getting_started getting_started.c)
+target_link_libraries (getting_started v8-bindings)

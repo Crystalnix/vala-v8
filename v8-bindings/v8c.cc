@@ -403,11 +403,13 @@ void*       v8_external_value(V8Handle self) {
   return wrap_handle<v8::External>(self)->Value();  
 }
 
+/* Template */
 void v8_template_set(V8Handle tmpl, V8Handle name, V8Handle value) {
   wrap_handle<v8::Template>(tmpl)->Set(wrap_handle<v8::String>(name),
                                        wrap_handle<v8::Data>(value));
 }
 
+/* Arguments */
 int v8_arguments_length(const V8Arguments* args) {
   return args->Length();
 }
@@ -416,6 +418,27 @@ V8Handle v8_arguments_get(const V8Arguments* args, int i) {
   return unwrap_handle((*args)[i]);
 }
 
+V8Handle v8_arguments_callee(const V8Arguments* args) {
+  return unwrap_handle(args->Callee());
+}
+
+V8Handle v8_arguments_this(const V8Arguments* args) {
+  return unwrap_handle(args->This());
+}
+
+V8Handle v8_arguments_holder(const V8Arguments* args) {
+  return unwrap_handle(args->Holder());
+}
+
+bool     v8_arguments_is_construct_call(const V8Arguments* args) {
+  return args->IsConstructCall();
+}
+
+V8Handle v8_arguments_data(const V8Arguments* args) {
+  return unwrap_handle(args->Data());
+}
+
+/* FunctionTemplate */
 static v8::Handle<v8::Value> v8_invocation_callback_no_data(const v8::Arguments& args) {
   v8::Local<v8::External> data = v8::Local<v8::External>::Cast(args.Data());
   V8InvocationCallback callback =
@@ -432,8 +455,8 @@ static v8::Handle<v8::Value> v8_invocation_callback_with_data(const v8::Argument
 
 V8Handle v8_function_template_new(V8InvocationCallback callback) {
   return unwrap_handle(
-      v8::FunctionTemplate::New(v8_invocation_callback_no_data,
-				v8::External::New((void*)callback)));
+      v8::FunctionTemplate::New((callback != NULL) ? v8_invocation_callback_no_data : 0,
+				(callback != NULL) ? v8::External::New((void*)callback) : v8::Handle<v8::Value>()));
 }
 
 V8Handle v8_function_template_new_with_data(V8InvocationCallbackData *callback_data) {
@@ -668,6 +691,10 @@ void v8_context_enter(V8Handle context) {
 
 void v8_context_exit(V8Handle context) {
   wrap_handle<v8::Context>(context)->Exit();
+}
+
+V8Handle v8_context_global(V8Handle self) {
+  return unwrap_handle(wrap_handle<v8::Context>(self)->Global());
 }
 
 }  // extern "C"

@@ -238,6 +238,11 @@ void v8_template_set(V8Handle tmpl, V8Handle name, V8Handle value);
 /* Arguments */
 int v8_arguments_length(const V8Arguments* args);
 V8Handle v8_arguments_get(const V8Arguments* args, int i);
+V8Handle v8_arguments_callee(const V8Arguments* args);
+V8Handle v8_arguments_this(const V8Arguments* args);
+V8Handle v8_arguments_holder(const V8Arguments* args);
+bool     v8_arguments_is_construct_call(const V8Arguments* args);
+V8Handle v8_arguments_data(const V8Arguments* args);
 
 /* FunctionTemplate */
 /* V8 lets you add a "data" value to a function template, but v8c uses
@@ -324,6 +329,7 @@ V8Handle v8_context_new(V8ExtensionConfiguration extensions,
 void v8_context_free(V8Handle context);
 void v8_context_enter(V8Handle context);
 void v8_context_exit(V8Handle context);
+V8Handle v8_context_global(V8Handle self);
 
 #ifdef __cplusplus
 }
