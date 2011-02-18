@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
   
   result = v8_script_run(script);
   
-  v8_context_free(context);
+  v8_context_dispose(context);
   
   utf8_value = v8_string_utf8_value_new(result);
   printf("%s\n", v8_string_utf8_value_chars(utf8_value));

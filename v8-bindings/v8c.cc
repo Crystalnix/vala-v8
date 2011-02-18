@@ -681,7 +681,7 @@ V8Handle v8_context_new(V8ExtensionConfiguration extensions,
                        wrap_handle<v8::ObjectTemplate>(global_template)));
 }
 
-void v8_context_free(V8Handle context) {
+void v8_context_dispose(V8Handle context) {
     return wrap_persistent_handle<v8::Context>(context).Dispose();
 }
 

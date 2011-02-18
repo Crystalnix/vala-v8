@@ -326,7 +326,7 @@ void v8_try_catch_set_verbose(V8TryCatch* try_catch, bool value);
 /* Context */
 V8Handle v8_context_new(V8ExtensionConfiguration extensions,
                         V8Handle global_template);
-void v8_context_free(V8Handle context);
+void v8_context_dispose(V8Handle context);
 void v8_context_enter(V8Handle context);
 void v8_context_exit(V8Handle context);
 V8Handle v8_context_global(V8Handle self);
