@@ -41,15 +41,31 @@ namespace v8
 	[Compact]
 	public class HandleScope {
 		public HandleScope ();
-		public void free ();
+		public Handle close (Handle value, HandleType handle_type);
+		public static int number_of_handles ();
 	}
 
 	[Compact]
-	public class StringUtf8Value {
-		public StringUtf8Value (Handle handle);
-		public int length ();
-		public unowned string chars ();
-		public void free ();
+	[CCode (cname = "V8Handle")]
+	public class String : Handle {
+		[CCode (cname = "v8_string_new_utf8")]
+		public String (string data, int length);
+
+		[Compact]
+		[CCode (cname = "V8Handle")]
+		public class AsciiValue {
+			public AsciiValue (Handle handle);
+			public int length ();
+			public unowned string chars ();
+		}
+
+		[Compact]
+		[CCode (cname = "V8Handle")]
+		public class Utf8Value {
+			public Utf8Value (Handle handle);
+			public int length ();
+			public unowned string chars ();
+		}
 	}
 
 	[Compact]
@@ -79,6 +95,7 @@ namespace v8
 		public void dispose ();
 		public void enter ();
 		public void exit ();
+		public Handle global();
 	}
 
 	[Compact]
@@ -87,8 +104,6 @@ namespace v8
 		public static Script compile (Handle source);
 		public Handle run ();
 	}
-
-	public static Handle string_new_utf8 (string data, int length);
 
 	public class Arguments {
 		public int length ();
@@ -100,4 +115,33 @@ namespace v8
 	public delegate Handle InvocationCallback (Arguments args);
 
 	public class ExtensionConfiguration {}
+
+	public enum HandleType {
+		UNKNOWN,
+		DATA,
+		SCRIPT,
+		MESSAGE,
+		STACK_TRACE,
+		STACK_FRAME,
+		VALUE,
+		PRIMITIVE,
+		BOOLEAN,
+		STRING,
+		NUMBER,
+		INTEGER,
+		INT32,
+		UINT32,
+		DATE,
+		REGEXP,
+		OBJECT,
+		ARRAY,
+		FUNCTION,
+		EXTERNAL,
+		TEMPLATE,
+		FUNCTION_TEMPLATE,
+		OBJECT_TEMPLATE,
+		SIGNATURE,
+		TYPE_SWITCH,
+		CONTEXT
+	}
 }
