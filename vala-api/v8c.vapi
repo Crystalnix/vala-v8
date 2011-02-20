@@ -169,6 +169,18 @@ namespace v8
 		public Handle get_frame_count ();
 	}
 
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class StackFrame : Handle {
+		public int get_line_number ();
+		public int get_column ();
+		public Handle get_script_name ();
+		public Handle get_script_name_or_source_url ();
+		public Handle get_function_name ();
+		public bool is_eval ();
+		public bool is_constructor ();
+	}
+
 	public class Arguments {
 		public int length ();
 		[CCode (cname = "v8_arguments_get")]
