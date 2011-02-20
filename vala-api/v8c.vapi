@@ -80,34 +80,6 @@ namespace v8
 	public class ExtensionConfiguration {}
 
 	[Compact]
-	[CCode (cname = "V8Handle")]
-	public class String : Handle {
-		[CCode (cname = "v8_string_new_utf8")]
-		public String (string data, int length);
-
-		[Compact]
-		[CCode (cname = "V8Handle")]
-		public class AsciiValue {
-			public AsciiValue (Handle handle);
-			public int length ();
-			public unowned string chars ();
-		}
-
-		[Compact]
-		[CCode (cname = "V8Handle")]
-		public class Utf8Value {
-			public Utf8Value (Handle handle);
-			public int length ();
-			public unowned string chars ();
-		}
-
-		[Compact]
-		[CCode (cname = "V8Handle")]
-		public class Value {
-		}
-	}
-
-	[Compact]
 	public class TryCatch {}
 
 	public static Handle undefined ();
@@ -231,6 +203,42 @@ namespace v8
 	public class Boolean : Value {
 		public Boolean (bool value);
 		public bool value ();
+	}
+
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class String : v8.Value {
+		[CCode (cname = "v8_string_new_utf8")]
+		public String (string data, int length);
+		public static Handle empty ();
+		public int length ();
+		public int utf8_length ();
+		public bool is_external ();
+		public bool is_external_ascii ();
+
+		[Compact]
+		[CCode (cname = "V8Handle")]
+		public class AsciiValue {
+			public AsciiValue (Handle handle);
+			public int length ();
+			public unowned string chars ();
+		}
+
+		[Compact]
+		[CCode (cname = "V8Handle")]
+		public class Utf8Value {
+			public Utf8Value (Handle handle);
+			public int length ();
+			public unowned string chars ();
+		}
+
+		[Compact]
+		[CCode (cname = "V8Handle")]
+		public class Value {
+			public Value (Handle handle);
+			public int length ();
+			public unowned string chars ();
+		}
 	}
 
 	public class Arguments {
