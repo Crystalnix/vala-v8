@@ -36,7 +36,35 @@ namespace v8
 		public bool is_empty ();
 	}
 
-	public static Handle undefined ();
+	[CCode (cprefix = "V8HT_", has_type_id = false)]
+	public enum HandleType {
+		UNKNOWN,
+		DATA,
+		SCRIPT,
+		MESSAGE,
+		STACK_TRACE,
+		STACK_FRAME,
+		VALUE,
+		PRIMITIVE,
+		BOOLEAN,
+		STRING,
+		NUMBER,
+		INTEGER,
+		INT32,
+		UINT32,
+		DATE,
+		REGEXP,
+		OBJECT,
+		ARRAY,
+		FUNCTION,
+		EXTERNAL,
+		TEMPLATE,
+		FUNCTION_TEMPLATE,
+		OBJECT_TEMPLATE,
+		SIGNATURE,
+		TYPE_SWITCH,
+		CONTEXT
+	}
 
 	[Compact]
 	public class HandleScope {
@@ -44,6 +72,12 @@ namespace v8
 		public Handle close (Handle value, HandleType handle_type);
 		public static int number_of_handles ();
 	}
+
+	[Compact]
+	public class AccessorInfo {}
+
+	[Compact]
+	public class ExtensionConfiguration {}
 
 	[Compact]
 	[CCode (cname = "V8Handle")]
@@ -66,12 +100,21 @@ namespace v8
 			public int length ();
 			public unowned string chars ();
 		}
+
+		[Compact]
+		[CCode (cname = "V8Handle")]
+		public class Value {
+		}
 	}
+
+	[Compact]
+	public class TryCatch {}
+
+	public static Handle undefined ();
 
 	[Compact]
 	[CCode (cname = "V8Handle")]
 	public class Template : Handle {
-
 	}
 
 	[Compact]
@@ -113,36 +156,4 @@ namespace v8
 
 	[CCode (has_target = false)]
 	public delegate Handle InvocationCallback (Arguments args);
-
-	public class ExtensionConfiguration {}
-
-	[CCode (cprefix = "V8HT_", has_type_id = false)]
-	public enum HandleType {
-		UNKNOWN,
-		DATA,
-		SCRIPT,
-		MESSAGE,
-		STACK_TRACE,
-		STACK_FRAME,
-		VALUE,
-		PRIMITIVE,
-		BOOLEAN,
-		STRING,
-		NUMBER,
-		INTEGER,
-		INT32,
-		UINT32,
-		DATE,
-		REGEXP,
-		OBJECT,
-		ARRAY,
-		FUNCTION,
-		EXTERNAL,
-		TEMPLATE,
-		FUNCTION_TEMPLATE,
-		OBJECT_TEMPLATE,
-		SIGNATURE,
-		TYPE_SWITCH,
-		CONTEXT
-	}
 }
