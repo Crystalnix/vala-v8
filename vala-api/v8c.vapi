@@ -241,6 +241,13 @@ namespace v8
 		}
 	}
 
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class Number : v8.Value {
+		public Number (double value);
+		public double value ();
+	}
+
 	public class Arguments {
 		public int length ();
 		[CCode (cname = "v8_arguments_get")]
