@@ -271,10 +271,18 @@ namespace v8
 
 	[Compact]
 	[CCode (cname = "V8Handle")]
-	public class Date : Value {
+	public class Date : v8.Value {
 		public Date (double time);
 		public double number_value ();
 		public static void time_configuration_change_notification ();
+	}
+
+	/* FIXME: is void ptr works? */
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class External : v8.Value {
+		public External (void *value);
+		public void* value ();
 	}
 
 	public class Arguments {
