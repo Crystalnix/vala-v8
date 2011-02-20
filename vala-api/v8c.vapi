@@ -248,6 +248,26 @@ namespace v8
 		public double value ();
 	}
 
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class Integer : Number {
+		public Integer (int32 value);
+		public Integer.from_unsigned (uint32 value);
+		public int64 value ();
+	}
+
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class Int32 : Integer {
+		public int32 value ();
+	}
+
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class Uint32 : Integer {
+		public uint32 value ();
+	}
+
 	public class Arguments {
 		public int length ();
 		[CCode (cname = "v8_arguments_get")]
