@@ -11,7 +11,7 @@ static Handle print_cb (Arguments args) {
   for (i = 0; i < length; ++i) {
     if (i > 0)
       stdout.printf (" ");
-    print_value (args.get_i(i));
+    print_value (args.get(i));
   }
   stdout.printf ("\n");
   return undefined ();
@@ -26,7 +26,7 @@ int main (string[] args)
 
 	var print = new FunctionTemplate (print_cb);
 	var global = new ObjectTemplate ();
-	global.template_set (new String ("print", -1), print);
+	global.set (new String ("print", -1), print);
 
 	var context = new Context (null, global);
 	context.enter ();

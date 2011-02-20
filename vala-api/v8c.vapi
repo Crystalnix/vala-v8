@@ -74,46 +74,6 @@ namespace v8
 	}
 
 	[Compact]
-	public class AccessorInfo {}
-
-	[Compact]
-	public class ExtensionConfiguration {}
-
-	[Compact]
-	public class TryCatch {}
-
-	public static Handle undefined ();
-
-	[Compact]
-	[CCode (cname = "V8Handle")]
-	public class Template : Handle {
-	}
-
-	[Compact]
-	[CCode (cname = "V8Handle")]
-	public class FunctionTemplate : Template {
-		public FunctionTemplate (InvocationCallback call_back);
-	}
-
-	[Compact]
-	[CCode (cname = "V8Handle")]
-	public class ObjectTemplate : Template {
-		public ObjectTemplate ();
-		[CCode (cname = "v8_template_set")]
-		public void template_set (Handle name, Handle value);
-	}
-
-	[Compact]
-	[CCode (cname = "V8Handle")]
-	public class Context : Handle {
-		public Context (ExtensionConfiguration? extensions, Handle global_template);
-		public void dispose ();
-		public void enter ();
-		public void exit ();
-		public Handle global();
-	}
-
-	[Compact]
 	[CCode (cname = "V8Handle")]
 	public class Script : Handle {
 		public static Script compile (Handle source);
@@ -123,7 +83,7 @@ namespace v8
 	[Compact]
 	[CCode (cname = "V8Handle")]
 	public class Message : Handle {
-		public Handle get_message ();
+		public Handle get ();
 		public Handle get_source_line ();
 		public Handle get_script_resource_name ();
 		public Handle get_stack_trace ();
@@ -237,8 +197,8 @@ namespace v8
 		public class Value {
 			public Value (Handle handle);
 			public int length ();
-			/* FIXME: ptr to uint16 */
-			public unowned string chars ();
+			/* FIXME: ptr to uint16? */
+			public unowned uint16 chars ();
 		}
 	}
 
@@ -285,12 +245,123 @@ namespace v8
 		public void* value ();
 	}
 
-	public class Arguments {
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class Template : Handle {
+		public void set (Handle name, Handle value);
+	}
+
+	[Compact]
+	public struct Arguments {
 		public int length ();
-		[CCode (cname = "v8_arguments_get")]
-		public Handle get_i (int i);
+		public Handle get (int i);
+		public Handle callee ();
+		public Handle this ();
+		public Handle holder ();
+		public bool is_construct_call ();
+		public Handle data ();
 	}
 
 	[CCode (has_target = false)]
 	public delegate Handle InvocationCallback (Arguments args);
+
+	public struct InvocationCallbackData {
+		public InvocationCallback callback;
+		public void *data;
+	}
+
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class FunctionTemplate : Template {
+		public FunctionTemplate (InvocationCallback callback);
+		public FunctionTemplate.with_data (InvocationCallbackData callbackData);
+		public Handle get_function ();
+		public void set_call_handler (InvocationCallback callback);
+		public Handle instance_template ();
+		public void inherit (Handle parent);
+		public Handle prototype_template ();
+		public void set_class_name (Handle name);
+		public void set_hidden_prototype (bool value);
+		public bool has_instance (Handle object);
+	}
+
+	[Compact]
+	public class AccessorInfo {}
+
+	[CCode (has_target = false)]
+	public delegate Handle AccessorGetter (Handle property, AccessorInfo info);
+
+	[CCode (has_target = false)]
+	public delegate void AccessorSetter (Handle property, Handle value, AccessorInfo info);
+
+	[CCode (has_target = false)]
+	public delegate Handle NamedPropertyGetter (Handle property, AccessorInfo info);
+
+	[CCode (has_target = false)]
+	public delegate Handle NamedPropertySetter (Handle property, Handle value, AccessorInfo info);
+
+	[CCode (has_target = false)]
+	public delegate Handle IndexedPropertyGetter (uint32 index, AccessorInfo info);
+
+	[CCode (has_target = false)]
+	public delegate Handle IndexedPropertySetter (uint32 index, Handle value, AccessorInfo info);
+
+	public struct AccessorData {
+		public AccessorGetter getter;
+		public AccessorSetter setter;
+	}
+
+	public struct NamedPropertyData {
+		public NamedPropertyGetter getter;
+		public NamedPropertySetter setter;
+	}
+
+	public struct IndexedPropertyData {
+		public IndexedPropertyGetter getter;
+		public IndexedPropertySetter setter;
+	}
+
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class ObjectTemplate : Template {
+		public ObjectTemplate ();
+		public Handle new_instance ();
+		public void set_accessor (Handle name, AccessorData accessor_data);
+		public void set_named_property_handler (NamedPropertyData named_property_data);
+		public void set_indexed_property_handler (IndexedPropertyData indexed_property_data);
+		public void set_call_as_function_handler (InvocationCallback callback);
+		public void mark_as_undetectable ();
+		public int internal_field_count ();
+		public void set_internal_field_count (int value);
+	}
+
+	public static Handle undefined ();
+	public static Handle null ();
+	public static Handle true ();
+	public static Handle false ();
+
+	public static void set_flags_from_command_line ([CCode (array_length_pos = 0.9)] ref unowned string[] argv, bool remove_flags);
+
+	[Compact]
+	public class TryCatch {
+		public TryCatch ();
+		public bool has_caught ();
+		public Handle exception ();
+		public Handle get_message ();
+		public void reset ();
+		public void set_verbose (bool value);
+	}
+
+	[Compact]
+	public class ExtensionConfiguration {}
+
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class Context : Handle {
+		public Context (ExtensionConfiguration? extensions, Handle global_template);
+		public void dispose ();
+		public void enter ();
+		public void exit ();
+		public Handle global();
+	}
 }
