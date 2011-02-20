@@ -226,6 +226,13 @@ namespace v8
 		public bool strict_equals (Handle that);
 	}
 
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class Boolean : Value {
+		public Boolean (bool value);
+		public bool value ();
+	}
+
 	public class Arguments {
 		public int length ();
 		[CCode (cname = "v8_arguments_get")]
