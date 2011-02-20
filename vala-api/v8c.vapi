@@ -269,6 +269,14 @@ namespace v8
 		public uint32 value ();
 	}
 
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class Date : Value {
+		public Date (double time);
+		public double number_value ();
+		public static void time_configuration_change_notification ();
+	}
+
 	public class Arguments {
 		public int length ();
 		[CCode (cname = "v8_arguments_get")]
