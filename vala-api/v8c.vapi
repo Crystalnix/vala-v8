@@ -116,6 +116,7 @@ namespace v8
 
 	public class ExtensionConfiguration {}
 
+	[CCode (cprefix = "V8HT_", has_type_id = false)]
 	public enum HandleType {
 		UNKNOWN,
 		DATA,
