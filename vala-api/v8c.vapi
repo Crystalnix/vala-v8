@@ -162,6 +162,13 @@ namespace v8
 		public int get_end_column ();
 	}
 
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class StackTrace : Handle {
+		public Handle get_frame (uint32 index);
+		public Handle get_frame_count ();
+	}
+
 	public class Arguments {
 		public int length ();
 		[CCode (cname = "v8_arguments_get")]
