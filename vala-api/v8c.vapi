@@ -200,7 +200,7 @@ namespace v8
 
 	[Compact]
 	[CCode (cname = "V8Handle")]
-	public class Boolean : Value {
+	public class Boolean : v8.Value {
 		public Boolean (bool value);
 		public bool value ();
 	}
