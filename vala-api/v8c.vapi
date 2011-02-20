@@ -148,6 +148,20 @@ namespace v8
 		public Handle run ();
 	}
 
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class Message : Handle {
+		public Handle get_message ();
+		public Handle get_source_line ();
+		public Handle get_script_resource_name ();
+		public Handle get_stack_trace ();
+		public int get_line_number ();
+		public int get_start_position ();
+		public int get_end_position ();
+		public int get_start_column ();
+		public int get_end_column ();
+	}
+
 	public class Arguments {
 		public int length ();
 		[CCode (cname = "v8_arguments_get")]
