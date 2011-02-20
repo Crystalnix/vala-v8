@@ -181,6 +181,51 @@ namespace v8
 		public bool is_constructor ();
 	}
 
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class Value : Handle {
+		public bool is_undefined ();
+		public bool is_null ();
+		public bool is_true ();
+		public bool is_false ();
+		public bool is_string ();
+		public bool is_function ();
+		public bool is_array ();
+		public bool is_object ();
+		public bool is_boolean ();
+		public bool is_number ();
+		public bool is_external ();
+		public bool is_int32 ();
+		public bool is_uint32 ();
+		public bool is_date ();
+		public bool is_regexp ();
+
+		public Handle to_boolean ();
+		public Handle to_number ();
+		public Handle to_string ();
+		public Handle to_detail_string ();
+		public Handle to_object ();
+		public Handle to_integer ();
+		public Handle to_uint32 ();
+		public Handle to_int32 ();
+
+		public Handle to_external ();
+
+		public Handle to_array_index ();
+
+		public bool boolean_value ();
+		public double number_value ();
+		public int64 integer_value ();
+		public uint32 uint32_value ();
+		public int32 int32_value ();
+
+		/* FIXME: Is it works? */
+		public void* voidp_value ();
+
+		public bool equals (Handle that);
+		public bool strict_equals (Handle that);
+	}
+
 	public class Arguments {
 		public int length ();
 		[CCode (cname = "v8_arguments_get")]
