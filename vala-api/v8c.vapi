@@ -237,6 +237,7 @@ namespace v8
 		public class Value {
 			public Value (Handle handle);
 			public int length ();
+			/* FIXME: ptr to uint16 */
 			public unowned string chars ();
 		}
 	}
