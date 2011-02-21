@@ -2,14 +2,14 @@
 
 #include <stdio.h>
 
-static void print_value(V8Handle v) {
+static void print_value(V8Handle *v) {
   V8StringUtf8Value* utf8 = v8_string_utf8_value_new(v);
   printf("%s", v8_string_utf8_value_chars(utf8));
   v8_string_utf8_value_free(utf8);
 }
 
 // A callback from JavaScript to print concisely.
-static V8Handle print_cb(const V8Arguments* args) {
+static V8Handle* print_cb(const V8Arguments* args) {
   int i, length = v8_arguments_length(args);
   for (i = 0; i < length; ++i) {
     if (i > 0)
@@ -22,7 +22,7 @@ static V8Handle print_cb(const V8Arguments* args) {
 
 int main(int argc, char *argv[])
 {
-  V8Handle context, source, script, result, global, print;
+  V8Handle *context, *source, *script, *result, *global, *print;
   V8HandleScope *handle_scope;
   V8StringUtf8Value* utf8_value;
   
