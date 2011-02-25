@@ -103,6 +103,10 @@ typedef struct _V8TryCatch      V8TryCatch;
 /* Handle */
 bool        v8_handle_is_empty(V8Handle* handle);
 
+/* Persistent */
+V8Handle*   v8_persistent_new(V8Handle* handle, HandleType handle_type);
+void        v8_persistent_dispose(V8Handle* handle, HandleType handle_type);
+
 /* HandleScope */
 V8HandleScope* v8_handle_scope_new();
 void           v8_handle_scope_free(V8HandleScope* hs);
@@ -228,6 +232,12 @@ V8Handle*    v8_date_new(double time);
 double      v8_date_number_value(V8Handle* self);
 void        v8_date_time_configuration_change_notification(void);
 
+/* Object */
+V8Handle*   v8_object_new();
+bool        v8_object_set_with_key(V8Handle *self, V8Handle* key, V8Handle* value);
+bool        v8_object_set_with_index(V8Handle *self, uint32_t index, V8Handle* value);
+V8Handle*   v8_object_get_with_key(V8Handle *self, V8Handle* key);
+
 /* External */
 V8Handle*    v8_external_new(void *value);
 void*       v8_external_value(V8Handle* self);
@@ -330,6 +340,15 @@ void v8_context_dispose(V8Handle* context);
 void v8_context_enter(V8Handle* context);
 void v8_context_exit(V8Handle* context);
 V8Handle* v8_context_global(V8Handle* self);
+V8Handle* v8_context_get_current();
+
+V8Handle* v8_exception_range_error      (V8Handle* message);
+V8Handle* v8_exception_reference_error  (V8Handle* message);
+V8Handle* v8_exception_syntax_error     (V8Handle* message);
+V8Handle* v8_exception_type_error       (V8Handle* message);
+V8Handle* v8_exception_error            (V8Handle* message);
+
+V8Handle* v8_exception_throw            (V8Handle* exception);
 
 #ifdef __cplusplus
 }

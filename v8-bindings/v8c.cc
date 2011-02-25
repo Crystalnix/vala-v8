@@ -25,6 +25,175 @@ bool v8_handle_is_empty(V8Handle* handle) {
   return wrap_handle<void>(handle).IsEmpty();
 }
 
+/* Persistent */
+V8Handle*   v8_persistent_new(V8Handle* handle, HandleType handle_type) {
+  V8Handle* res = NULL;
+  switch (handle_type) {
+  case V8HT_DATA:
+    res = unwrap_handle(v8::Persistent<v8::Data>::New(wrap_handle<v8::Data>(handle)));
+    break;
+  case V8HT_SCRIPT:
+    res = unwrap_handle(v8::Persistent<v8::Script>::New(wrap_handle<v8::Script>(handle)));
+    break;
+  case V8HT_MESSAGE:
+    res = unwrap_handle(v8::Persistent<v8::Message>::New(wrap_handle<v8::Message>(handle)));
+    break;
+  case V8HT_STACK_TRACE:
+    res = unwrap_handle(v8::Persistent<v8::StackTrace>::New(wrap_handle<v8::StackTrace>(handle)));
+    break;
+  case V8HT_STACK_FRAME:
+    res = unwrap_handle(v8::Persistent<v8::StackFrame>::New(wrap_handle<v8::StackFrame>(handle)));
+    break;
+  case V8HT_VALUE:
+    res = unwrap_handle(v8::Persistent<v8::Value>::New(wrap_handle<v8::Value>(handle)));
+    break;
+  case V8HT_PRIMITIVE:
+    res = unwrap_handle(v8::Persistent<v8::Primitive>::New(wrap_handle<v8::Primitive>(handle)));
+    break;
+  case V8HT_BOOLEAN:
+    res = unwrap_handle(v8::Persistent<v8::Boolean>::New(wrap_handle<v8::Boolean>(handle)));
+    break;
+  case V8HT_STRING:
+    res = unwrap_handle(v8::Persistent<v8::String>::New(wrap_handle<v8::String>(handle)));
+    break;
+  case V8HT_NUMBER:
+    res = unwrap_handle(v8::Persistent<v8::Number>::New(wrap_handle<v8::Number>(handle)));
+    break;
+  case V8HT_INTEGER:
+    res = unwrap_handle(v8::Persistent<v8::Integer>::New(wrap_handle<v8::Integer>(handle)));
+    break;
+  case V8HT_INT32:
+    res = unwrap_handle(v8::Persistent<v8::Int32>::New(wrap_handle<v8::Int32>(handle)));
+    break;
+  case V8HT_UINT32:
+    res = unwrap_handle(v8::Persistent<v8::Uint32>::New(wrap_handle<v8::Uint32>(handle)));
+    break;
+  case V8HT_DATE:
+    res = unwrap_handle(v8::Persistent<v8::Date>::New(wrap_handle<v8::Date>(handle)));
+    break;
+  case V8HT_REGEXP:
+    res = unwrap_handle(v8::Persistent<v8::RegExp>::New(wrap_handle<v8::RegExp>(handle)));
+    break;
+  case V8HT_OBJECT:
+    res = unwrap_handle(v8::Persistent<v8::Object>::New(wrap_handle<v8::Object>(handle)));
+    break;
+  case V8HT_ARRAY:
+    res = unwrap_handle(v8::Persistent<v8::Array>::New(wrap_handle<v8::Array>(handle)));
+    break;
+  case V8HT_FUNCTION:
+    res = unwrap_handle(v8::Persistent<v8::Function>::New(wrap_handle<v8::Function>(handle)));
+    break;
+  case V8HT_EXTERNAL:
+    res = unwrap_handle(v8::Persistent<v8::External>::New(wrap_handle<v8::External>(handle)));
+    break;
+  case V8HT_TEMPLATE:
+    res = unwrap_handle(v8::Persistent<v8::Template>::New(wrap_handle<v8::Template>(handle)));
+    break;
+  case V8HT_FUNCTION_TEMPLATE:
+    res = unwrap_handle(v8::Persistent<v8::FunctionTemplate>::New(wrap_handle<v8::FunctionTemplate>(handle)));
+    break;
+  case V8HT_OBJECT_TEMPLATE:
+    res = unwrap_handle(v8::Persistent<v8::ObjectTemplate>::New(wrap_handle<v8::ObjectTemplate>(handle)));
+    break;
+  case V8HT_SIGNATURE:
+    res = unwrap_handle(v8::Persistent<v8::Signature>::New(wrap_handle<v8::Signature>(handle)));
+    break;
+  case V8HT_TYPE_SWITCH:
+    res = unwrap_handle(v8::Persistent<v8::TypeSwitch>::New(wrap_handle<v8::TypeSwitch>(handle)));
+    break;
+  case V8HT_CONTEXT:
+    res = unwrap_handle(v8::Persistent<v8::Context>::New(wrap_handle<v8::Context>(handle)));
+    break;
+  default:
+    res = NULL;
+    break;
+  }
+  
+  return res;
+}
+
+void        v8_persistent_dispose(V8Handle* handle, HandleType handle_type) {
+  switch (handle_type) {
+  case V8HT_DATA:
+    wrap_persistent_handle<v8::Data>(handle).Dispose();
+    break;
+  case V8HT_SCRIPT:
+    wrap_persistent_handle<v8::Script>(handle).Dispose();
+    break;
+  case V8HT_MESSAGE:
+    wrap_persistent_handle<v8::Message>(handle).Dispose();
+    break;
+  case V8HT_STACK_TRACE:
+    wrap_persistent_handle<v8::StackTrace>(handle).Dispose();
+    break;
+  case V8HT_STACK_FRAME:
+    wrap_persistent_handle<v8::StackFrame>(handle).Dispose();
+    break;
+  case V8HT_VALUE:
+    wrap_persistent_handle<v8::Value>(handle).Dispose();
+    break;
+  case V8HT_PRIMITIVE:
+    wrap_persistent_handle<v8::Primitive>(handle).Dispose();
+    break;
+  case V8HT_BOOLEAN:
+    wrap_persistent_handle<v8::Boolean>(handle).Dispose();
+    break;
+  case V8HT_STRING:
+    wrap_persistent_handle<v8::String>(handle).Dispose();
+    break;
+  case V8HT_NUMBER:
+    wrap_persistent_handle<v8::Number>(handle).Dispose();
+    break;
+  case V8HT_INTEGER:
+    wrap_persistent_handle<v8::Integer>(handle).Dispose();
+    break;
+  case V8HT_INT32:
+    wrap_persistent_handle<v8::Int32>(handle).Dispose();
+    break;
+  case V8HT_UINT32:
+    wrap_persistent_handle<v8::Uint32>(handle).Dispose();
+    break;
+  case V8HT_DATE:
+    wrap_persistent_handle<v8::Date>(handle).Dispose();
+    break;
+  case V8HT_REGEXP:
+    wrap_persistent_handle<v8::RegExp>(handle).Dispose();
+    break;
+  case V8HT_OBJECT:
+    wrap_persistent_handle<v8::Object>(handle).Dispose();
+    break;
+  case V8HT_ARRAY:
+    wrap_persistent_handle<v8::Array>(handle).Dispose();
+    break;
+  case V8HT_FUNCTION:
+    wrap_persistent_handle<v8::Function>(handle).Dispose();
+    break;
+  case V8HT_EXTERNAL:
+    wrap_persistent_handle<v8::External>(handle).Dispose();
+    break;
+  case V8HT_TEMPLATE:
+    wrap_persistent_handle<v8::Template>(handle).Dispose();
+    break;
+  case V8HT_FUNCTION_TEMPLATE:
+    wrap_persistent_handle<v8::FunctionTemplate>(handle).Dispose();
+    break;
+  case V8HT_OBJECT_TEMPLATE:
+    wrap_persistent_handle<v8::ObjectTemplate>(handle).Dispose();
+    break;
+  case V8HT_SIGNATURE:
+    wrap_persistent_handle<v8::Signature>(handle).Dispose();
+    break;
+  case V8HT_TYPE_SWITCH:
+    wrap_persistent_handle<v8::TypeSwitch>(handle).Dispose();
+    break;
+  case V8HT_CONTEXT:
+    wrap_persistent_handle<v8::Context>(handle).Dispose();
+    break;
+  default:
+    break;
+  }
+}
+
 V8CHandleScope* v8_handle_scope_new() {
   return new V8CHandleScope();
 }
@@ -394,6 +563,25 @@ void        v8_date_time_configuration_change_notification(void) {
   v8::Date::DateTimeConfigurationChangeNotification();
 }
 
+/* Object */
+V8Handle*   v8_object_new() {
+  return unwrap_handle(v8::Object::New());
+}
+
+bool        v8_object_set_with_key(V8Handle *self, V8Handle* key, V8Handle* value) {
+  return wrap_handle<v8::Object>(self)->Set(wrap_handle<v8::Value>(key),
+                                            wrap_handle<v8::Value>(value));
+}
+
+bool        v8_object_set_with_index(V8Handle *self, uint32_t index, V8Handle* value) {
+  return wrap_handle<v8::Object>(self)->Set(index,
+                                            wrap_handle<v8::Value>(value));
+}
+
+V8Handle*   v8_object_get_with_key(V8Handle *self, V8Handle* key) {
+  return unwrap_handle(wrap_handle<v8::Object>(self)->Get(wrap_handle<v8::Value>(key)));
+}
+
 /* External */
 V8Handle*    v8_external_new(void *value) {
   return unwrap_handle(v8::External::New(value));
@@ -695,6 +883,34 @@ void v8_context_exit(V8Handle* context) {
 
 V8Handle* v8_context_global(V8Handle* self) {
   return unwrap_handle(wrap_handle<v8::Context>(self)->Global());
+}
+
+V8Handle* v8_context_get_current() {
+  return unwrap_handle(v8::Context::GetCurrent());
+}
+
+V8Handle* v8_exception_range_error      (V8Handle* message) {
+  return unwrap_handle(v8::Exception::RangeError(wrap_handle<v8::String>(message)));
+}
+
+V8Handle* v8_exception_reference_error  (V8Handle* message) {
+  return unwrap_handle(v8::Exception::ReferenceError(wrap_handle<v8::String>(message)));
+}
+
+V8Handle* v8_exception_syntax_error     (V8Handle* message) {
+  return unwrap_handle(v8::Exception::SyntaxError(wrap_handle<v8::String>(message)));
+}
+
+V8Handle* v8_exception_type_error       (V8Handle* message) {
+  return unwrap_handle(v8::Exception::TypeError(wrap_handle<v8::String>(message)));
+}
+
+V8Handle* v8_exception_error            (V8Handle* message) {
+  return unwrap_handle(v8::Exception::Error(wrap_handle<v8::String>(message)));
+}
+
+V8Handle* v8_exception_throw            (V8Handle* exception) {
+  return unwrap_handle(v8::ThrowException(wrap_handle<v8::Value>(exception)));
 }
 
 }  // extern "C"

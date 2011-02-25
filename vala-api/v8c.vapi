@@ -35,7 +35,20 @@ namespace v8
 	public class Handle {
 		public bool is_empty ();
 	}
-
+/*
+    [Compact]
+    [CCode (cname = "V8Handle")]
+    public class Local : Handle {
+        public Local(Handle that, HandleType type);
+    }
+    
+    [Compact]
+    [CCode (cname = "V8Handle")]
+    public class Persistent : Handle {
+        public Persistent(Handle that, HandleType type);
+        public void dispose(HandleType type);
+    }
+*/
 	[CCode (cprefix = "V8HT_", has_type_id = false)]
 	public enum HandleType {
 		UNKNOWN,
@@ -237,6 +250,15 @@ namespace v8
 		public static void time_configuration_change_notification ();
 	}
 
+    [Compact]
+    [CCode (cname = "V8Handle")]
+    public class Object : v8.Value {
+        public Object ();
+        public bool set_with_key (Value key, Value value);
+        public bool set_with_index (uint32_t index, Value value);
+        public Value get_with_key (Value key);
+    }
+    
 	/* FIXME: is void ptr works? */
 	[Compact]
 	[CCode (cname = "V8Handle")]
@@ -363,5 +385,18 @@ namespace v8
 		public void enter ();
 		public void exit ();
 		public Handle global();
+		public static Context get_current();
+	}
+	
+	[Compact]
+	[CCode (cname = "V8Handle")]
+	public class Exception : Handle {
+	    public static Handle range_error (String message);
+	    public static Handle reference_error (String message);
+	    public static Handle syntax_error (String message);
+	    public static Handle type_error (String message);
+	    public static Handle error (String message);
+	    
+	    public Handle throw ();
 	}
 }

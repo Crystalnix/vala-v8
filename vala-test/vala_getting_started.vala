@@ -37,8 +37,11 @@ int main (string[] args)
 
 	var result = script.run ();
 
+    context.exit ();
+	context.dispose ();
+	
 	utf8_value = new String.Utf8Value (result);
 	stdout.printf ("%s\n", utf8_value.chars ());
-
+	
 	return 0;
 }
