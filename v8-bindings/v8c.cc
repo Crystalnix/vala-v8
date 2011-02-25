@@ -26,7 +26,7 @@ bool v8_handle_is_empty(V8Handle* handle) {
 }
 
 /* Persistent */
-V8Handle*   v8_persistent_new(V8Handle* handle, HandleType handle_type) {
+V8Handle*   v8_persistent_new(V8Handle* handle, V8HandleType handle_type) {
   V8Handle* res = NULL;
   switch (handle_type) {
   case V8HT_DATA:
@@ -112,7 +112,7 @@ V8Handle*   v8_persistent_new(V8Handle* handle, HandleType handle_type) {
   return res;
 }
 
-void        v8_persistent_dispose(V8Handle* handle, HandleType handle_type) {
+void        v8_persistent_dispose(V8Handle* handle, V8HandleType handle_type) {
   switch (handle_type) {
   case V8HT_DATA:
     wrap_persistent_handle<v8::Data>(handle).Dispose();

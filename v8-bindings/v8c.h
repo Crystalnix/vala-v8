@@ -104,8 +104,8 @@ typedef struct _V8TryCatch      V8TryCatch;
 bool        v8_handle_is_empty(V8Handle* handle);
 
 /* Persistent */
-V8Handle*   v8_persistent_new(V8Handle* handle, HandleType handle_type);
-void        v8_persistent_dispose(V8Handle* handle, HandleType handle_type);
+V8Handle*   v8_persistent_new(V8Handle* handle, V8HandleType handle_type);
+void        v8_persistent_dispose(V8Handle* handle, V8HandleType handle_type);
 
 /* HandleScope */
 V8HandleScope* v8_handle_scope_new();

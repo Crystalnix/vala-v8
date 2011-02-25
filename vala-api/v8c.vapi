@@ -35,7 +35,7 @@ namespace v8
 	public class Handle {
 		public bool is_empty ();
 	}
-/*
+	
     [Compact]
     [CCode (cname = "V8Handle")]
     public class Local : Handle {
@@ -48,7 +48,7 @@ namespace v8
         public Persistent(Handle that, HandleType type);
         public void dispose(HandleType type);
     }
-*/
+
 	[CCode (cprefix = "V8HT_", has_type_id = false)]
 	public enum HandleType {
 		UNKNOWN,
@@ -255,7 +255,7 @@ namespace v8
     public class Object : v8.Value {
         public Object ();
         public bool set_with_key (Value key, Value value);
-        public bool set_with_index (uint32_t index, Value value);
+        public bool set_with_index (uint32 index, Value value);
         public Value get_with_key (Value key);
     }
     
