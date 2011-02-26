@@ -12,12 +12,9 @@ set(V8_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../v8")
 find_package(PkgConfig)
 pkg_check_modules(GO REQUIRED gobject-2.0 glib-2.0 gobject-introspection-1.0)
 
-include_directories("${CMAKE_SOURCE_DIR}/v8-bindings" ${GO_INCLUDE_DIRS})
+include_directories("${CMAKE_SOURCE_DIR}/test-bindings" ${GO_INCLUDE_DIRS})
 link_directories(${V8_PATH} ${GO_LIBRARY_DIRS})
 
 link_libraries(${GO_LIBRARIES})
 
-
-add_subdirectory (v8-bindings)
-add_subdirectory (test)
-add_subdirectory (vala-test)
+add_subdirectory (test-bindings)
