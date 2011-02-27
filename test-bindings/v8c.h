@@ -41,11 +41,13 @@
    both the C++ implementation and the C user.  These typedefs make the
    function prototypes work on both sides.
 */
+
+typedef void V8HandleWrap;
+
 #ifdef __cplusplus
 class V8CHandleScope;
-class V8CHandleWrap;
+template <class T> class V8CHandleWrap;
 extern "C" {
-  typedef V8CHandleWrap           V8HandleWrap;
   typedef V8CHandleScope          V8HandleScope;
   typedef v8::Arguments           V8Arguments;
   typedef v8::AccessorInfo        V8AccessorInfo;
@@ -56,7 +58,6 @@ extern "C" {
   typedef v8::TryCatch            V8TryCatch;
 #else  /* Compiling on the C side. */
   typedef int bool;
-  typedef struct _V8HandleWrap    V8HandleWrap;
   typedef struct _V8HandleScope   V8HandleScope;
   typedef struct _V8Arguments     V8Arguments;
   typedef struct _V8AccessorInfo  V8AccessorInfo;
@@ -96,8 +97,8 @@ extern "C" {
     V8HT_CONTEXT    
   } V8HandleType;
 
-  struct _V8Handle {
-    V8HandleWrap *handle;
+  typedef struct _V8Handle {
+    void *handle;
     V8HandleType  type;
   } V8Handle;
 
@@ -105,6 +106,8 @@ extern "C" {
   typedef V8Handle V8Persistent;
 
   typedef void V8String;
+  typedef void V8Script;
+  typedef void V8Context;
 
   /* Handle */
   void*       v8_handle_data(V8Handle* self);
@@ -131,11 +134,10 @@ extern "C" {
   void    v8_string_utf8_value_free(V8StringUtf8Value* utf8);
 
   /* Context */
-  V8Handle* v8_context_new(V8ExtensionConfiguration extensions,
-			   V8Handle* global_template);
-  void v8_context_dispose(V8Handle* context);
-  void v8_context_enter(V8Handle* context);
-  void v8_context_exit(V8Handle* context);
+  V8Persistent* v8_context_new();
+  void v8_context_dispose(V8Context* self);
+  void v8_context_enter(V8Context* self);
+  void v8_context_exit(V8Context* self);
 
 #ifdef __cplusplus
 }

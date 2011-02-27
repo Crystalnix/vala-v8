@@ -15,9 +15,11 @@ public:
 template <class T> class V8CHandleWrap
 {
  public:
-  V8CHandleWrap (const v8::Handle<T>& h) : handle_(h) {}
+  inline V8CHandleWrap (const v8::Handle<T>& h) : handle_(h) {}
 
-  inline v8::Handle<T>* handle () { return handle_; }
+  inline v8::Handle<T>* handle () { return &handle_; }
+  inline v8::Local<T>* local () { return reinterpret_cast<v8::Local<T>*>(&handle_); }
+  inline v8::Persistent<T>* persistent () { return reinterpret_cast<v8::Persistent<T>*>(&handle_); }
 
   inline void* data () { return reinterpret_cast<void*>(*handle_); }
 

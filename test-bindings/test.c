@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
   v8_context_enter (v8_handle_data (context));
 
   // Create a string containing the JavaScript source code.
-  V8Handle* source = v8_string_new_utf8 ("'Hello' + ', World!'");
+  V8Handle* source = v8_string_new_utf8 ("'Hello' + ', World!'", -1);
 
   // Compile the source code.
   V8Handle* script = v8_script_compile (source);
