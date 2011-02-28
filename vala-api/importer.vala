@@ -1,48 +1,48 @@
-using namespace v8;
-using namespace GI;
+using v8;
+using GI;
 
 public class Importer {
   private Importer() {}
   
-  public static init(ObjectTemplate global) {
+  public static void init(ObjectTemplate global) {
     HandleScope hs = new HandleScope();
     
-    imports = new Persistent(new ObjectTemplate(), HandleType.OBJECT_TEMPLATE);
+    imports = (ObjectTemplate)Persistent.new(ObjectTemplate.new(), HandleType.OBJECT_TEMPLATE);
     NamedPropertyData imports_npd = { Importer.imports_get_property, null };
     imports.set_named_property_handler(imports_npd);
     
-    imports_gi = new Persistent(new ObjectTemplate(), HandleType.OBJECT_TEMPLATE);
-    NamedPropertyData imports_gi_npd = { Importer.imports_gi_get_property, null }
+    imports_gi = (ObjectTemplate)Persistent.new(ObjectTemplate.new(), HandleType.OBJECT_TEMPLATE);
+    NamedPropertyData imports_gi_npd = { Importer.imports_gi_get_property, null };
     imports_gi.set_named_property_handler(imports_gi_npd);
     
-    imports_gi_versions = new Persistent(new v8.Object(), HandleType.OBJECT);
+    imports_gi_versions = (v8.Object)Persistent.new(v8.Object.new(), HandleType.OBJECT);
     
-    gi_hash = new HashTable<string, Handle>();
+    gi_hash = new HashTable<string, Handle>(str_hash, str_equal);
     
-    global.set(new String("imports", -1), imports.new_instance());
+    global.set(String.new("imports", -1), imports.new_instance());
   }
   
-  private static Handle imports_get_property(Handle property, AccessorInfo info) {
+  private static unowned Handle imports_get_property(Handle property, AccessorInfo info) {
     String.Utf8Value prop_str = new String.Utf8Value(property);
-    if (!strcmp(prop_str.chars(), "gi"))
+    if (strcmp(prop_str.chars(), "gi") == 0)
       return imports_gi;
-    if (!strcmp(prop_str.chars(), "searchPath"))
-      return NULL;
-    if (!strcmp(prop_str.chars(), "toString"))
-      return NULL;
+    if (strcmp(prop_str.chars(), "searchPath") == 0)
+      return v8.null();
+    if (strcmp(prop_str.chars(), "toString") == 0)
+      return v8.null();
+    return v8.null();
   }
   
-  private static Handle imports_gi_get_property(Handle property, AccessorInfo info) {
+  private static unowned Handle imports_gi_get_property(Handle property, AccessorInfo info) {
     String.Utf8Value prop_str = new String.Utf8Value(property);
-    if (!strcmp(prop_str.chars(), "versions"))
+    if (strcmp(prop_str.chars(), "versions") == 0)
       return imports_gi_versions;
-    if (!strcmp(prop_str.chars(), "toString"))
-      return NULL;
-    if (!strcmp(prop_str.chars(), "valueOf")
-      return NULL;
+    if (strcmp(prop_str.chars(), "toString") == 0)
+      return v8.null();
+    if (strcmp(prop_str.chars(), "valueOf") == 0)
+      return v8.null();
       
-    Value ret;
-    TryCatch tc = new TryCatch();
+    unowned v8.Value ret;
     ret = imports_gi_do_namespace(prop_str.chars());
     /*if (ret.is_empty()) {
       String.Utf8Value msg = new String.Utf8Value(tc.exception());
@@ -53,20 +53,21 @@ public class Importer {
     return ret;
   }
   
-  private static Value imports_gi_do_namespace(unowned string namespace) {
-    v8.Object namespace_obj;
+  private static unowned v8.Value imports_gi_do_namespace(string namespace) {
+    unowned v8.Object namespace_obj;
     HandleScope hs = new HandleScope();
     
-    if (namespace_obj = gi_hash.lookup(namespace)) {
+    namespace_obj = (v8.Object)gi_hash.lookup(namespace);
+    if (namespace_obj != null) {
       /* TODO: log */
       return namespace_obj;
     }
     
-    String version = imports_gi_get_version(namespace);
+    unowned String version = imports_gi_get_version(namespace);
     String.Utf8Value version_v = new String.Utf8Value(version);
 
     try {
-      Repository.require(null, namespace, version, 0);
+      Repository.require(null, namespace, version_v.chars(), 0);
       uint n = Repository.get_n_infos(null, namespace);
     
       BaseInfo info;
@@ -101,14 +102,14 @@ public class Importer {
     return v8.null();
   }
   
-  private static String imports_gi_get_version(unowned string namespace) {
+  private static unowned String imports_gi_get_version(string namespace) {
     HandleScope hs = new HandleScope();
-    Value ret = imports_gi_versions.get_with_key(new String(namespace, -1));
-    return hs.close(ret, HandleType.VALUE);
+    unowned v8.Value ret = imports_gi_versions.get_with_key(String.new(namespace, -1));
+    return (String)hs.close(ret, HandleType.VALUE);
   }
   
-  private static ObjectTemplate imports;
-  private static ObjectTemplate imports_gi;
-  private static v8.Object imports_gi_versions;
+  private static unowned ObjectTemplate imports;
+  private static unowned ObjectTemplate imports_gi;
+  private static unowned v8.Object imports_gi_versions;
   private static HashTable<string, Handle> gi_hash;
 }

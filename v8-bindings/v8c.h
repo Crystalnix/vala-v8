@@ -36,6 +36,9 @@
    all the documentation.
 */
 
+#ifndef __V8C_h__
+#define __V8C_h__
+
 #include <stdint.h>
 
 /* v8::Handle has a lot of nice type-checking and wrapping and unwrapping,
@@ -353,3 +356,5 @@ V8Handle* v8_exception_throw            (V8Handle* exception);
 #ifdef __cplusplus
 }
 #endif
+
+#endif // #ifndef __V8C_h__

@@ -8,6 +8,7 @@ list(APPEND CMAKE_MODULE_PATH
 find_package(Vala REQUIRED)
 
 set(V8_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../v8")
+set(CMAKE_C_FLAGS -g)
 
 find_package(PkgConfig)
 pkg_check_modules(GO REQUIRED gobject-2.0 glib-2.0 gobject-introspection-1.0)
@@ -20,4 +21,5 @@ link_libraries(${GO_LIBRARIES})
 
 add_subdirectory (v8-bindings)
 add_subdirectory (test)
+add_subdirectory (vala-api)
 add_subdirectory (vala-test)

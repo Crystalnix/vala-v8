@@ -28,7 +28,7 @@ int main (string[] args)
 	var global = new ObjectTemplate ();
 	global.set (new String ("print", -1), print);
 
-	var context = new Context (null, global);
+	var context = Context.new (null, global);
 	context.enter ();
 
 	var source = new String ("print(1); 'Hello' + ', World!'", -1);
