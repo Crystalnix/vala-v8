@@ -388,7 +388,7 @@ namespace v8
 		public void dispose ();
 		public void enter ();
 		public void exit ();
-		public unowned Handle global();
+		public unowned Object global();
 		public static unowned Context get_current();
 	}
 	

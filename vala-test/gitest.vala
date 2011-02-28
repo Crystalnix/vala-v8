@@ -27,10 +27,10 @@ int main (string[] args)
 
 	unowned ObjectTemplate global = ObjectTemplate.new ();
   
-  Importer.init(global);
-  
   unowned Context context = Context.new (null, global);
 	context.enter ();
+
+  Importer.init(context.global());
 
 	unowned String source = read_file(args[1]);
 

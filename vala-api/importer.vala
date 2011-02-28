@@ -4,22 +4,27 @@ using GI;
 public class Importer {
   private Importer() {}
   
-  public static void init(ObjectTemplate global) {
+  public static void init(v8.Object global) {
     HandleScope hs = new HandleScope();
     
-    imports = (ObjectTemplate)Persistent.new(ObjectTemplate.new(), HandleType.OBJECT_TEMPLATE);
+    unowned ObjectTemplate imports_t;
+    unowned ObjectTemplate imports_gi_t;
+    
+    imports_t = (ObjectTemplate)Persistent.new(ObjectTemplate.new(), HandleType.OBJECT_TEMPLATE);
     NamedPropertyData imports_npd = { Importer.imports_get_property, null };
-    imports.set_named_property_handler(imports_npd);
+    imports_t.set_named_property_handler(imports_npd);
+    imports = (v8.Object)imports_t.new_instance();
     
-    imports_gi = (ObjectTemplate)Persistent.new(ObjectTemplate.new(), HandleType.OBJECT_TEMPLATE);
+    imports_gi_t = (ObjectTemplate)Persistent.new(ObjectTemplate.new(), HandleType.OBJECT_TEMPLATE);
     NamedPropertyData imports_gi_npd = { Importer.imports_gi_get_property, null };
-    imports_gi.set_named_property_handler(imports_gi_npd);
+    imports_gi_t.set_named_property_handler(imports_gi_npd);
+    imports_gi = (v8.Object)imports_t.new_instance();
     
-    imports_gi_versions = (v8.Object)Persistent.new(v8.Object.new(), HandleType.OBJECT);
-    
+    imports_gi_versions = (v8.Object)Persistent.new(v8.ObjectTemplate.new().new_instance(), HandleType.OBJECT);
+      
     gi_hash = new HashTable<string, Handle>(str_hash, str_equal);
     
-    global.set(String.new("imports", -1), imports.new_instance());
+    global.set_with_key(String.new("imports", -1), imports);
   }
   
   private static unowned Handle imports_get_property(Handle property, AccessorInfo info) {
@@ -108,8 +113,8 @@ public class Importer {
     return (String)hs.close(ret, HandleType.VALUE);
   }
   
-  private static unowned ObjectTemplate imports;
-  private static unowned ObjectTemplate imports_gi;
+  private static unowned v8.Object imports;
+  private static unowned v8.Object imports_gi;
   private static unowned v8.Object imports_gi_versions;
   private static HashTable<string, Handle> gi_hash;
 }

@@ -9,6 +9,7 @@ find_package(Vala REQUIRED)
 
 set(V8_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../v8")
 set(CMAKE_C_FLAGS -g)
+set(CMAKE_CXX_FLAGS -g)
 
 find_package(PkgConfig)
 pkg_check_modules(GO REQUIRED gobject-2.0 glib-2.0 gobject-introspection-1.0)
