@@ -352,9 +352,9 @@ namespace v8
 	public class ObjectTemplate : Template {
 		public static unowned ObjectTemplate new ();
 		public unowned Handle new_instance ();
-		public void set_accessor (Handle name, AccessorData accessor_data);
-		public void set_named_property_handler (NamedPropertyData named_property_data);
-		public void set_indexed_property_handler (IndexedPropertyData indexed_property_data);
+		public void set_accessor (Handle name, ref AccessorData accessor_data);
+		public void set_named_property_handler (ref NamedPropertyData named_property_data);
+		public void set_indexed_property_handler (ref IndexedPropertyData indexed_property_data);
 		public void set_call_as_function_handler (InvocationCallback callback);
 		public void mark_as_undetectable ();
 		public int internal_field_count ();

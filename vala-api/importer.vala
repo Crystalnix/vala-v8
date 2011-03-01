@@ -11,16 +11,16 @@ public class Importer {
     unowned ObjectTemplate imports_gi_t;
     
     imports_t = (ObjectTemplate)Persistent.new(ObjectTemplate.new(), HandleType.OBJECT_TEMPLATE);
-    NamedPropertyData imports_npd = { Importer.imports_get_property, null };
-    imports_t.set_named_property_handler(imports_npd);
-    imports = (v8.Object)imports_t.new_instance();
+    imports_npd = { Importer.imports_get_property, null };
+    imports_t.set_named_property_handler(ref imports_npd);
+    imports = (v8.Object)Persistent.new(imports_t.new_instance(), HandleType.OBJECT);
     
     imports_gi_t = (ObjectTemplate)Persistent.new(ObjectTemplate.new(), HandleType.OBJECT_TEMPLATE);
-    NamedPropertyData imports_gi_npd = { Importer.imports_gi_get_property, null };
-    imports_gi_t.set_named_property_handler(imports_gi_npd);
-    imports_gi = (v8.Object)imports_t.new_instance();
+    imports_gi_npd = { Importer.imports_gi_get_property, null };
+    imports_gi_t.set_named_property_handler(ref imports_gi_npd);
+    imports_gi = (v8.Object)Persistent.new(imports_gi_t.new_instance(), HandleType.OBJECT);
     
-    imports_gi_versions = (v8.Object)Persistent.new(v8.ObjectTemplate.new().new_instance(), HandleType.OBJECT);
+    imports_gi_versions = (v8.Object)Persistent.new(v8.Object.new(), HandleType.OBJECT);
       
     gi_hash = new HashTable<string, Handle>(str_hash, str_equal);
     
@@ -113,8 +113,12 @@ public class Importer {
     return (String)hs.close(ret, HandleType.VALUE);
   }
   
+  private static NamedPropertyData imports_npd;
+  private static NamedPropertyData imports_gi_npd;
   private static unowned v8.Object imports;
+  private static unowned ObjectTemplate imports_t;
   private static unowned v8.Object imports_gi;
+  private static unowned ObjectTemplate imports_gi_t;
   private static unowned v8.Object imports_gi_versions;
   private static HashTable<string, Handle> gi_hash;
 }
